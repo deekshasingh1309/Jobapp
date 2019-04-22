@@ -13,11 +13,12 @@ exports.create = (req, res) => {
     const fields_apply = new apply_route.third({
         company_id: req.body.company_id,
         userid: req.body.userid,
-        status:enums1.status[req.body.status]
+        status: enums1.status[req.body.status]
     });
 
-    apply_route.first.find({'id':req.params.id}).then(response=>{
-        if(response[0].roles==enums1.roles.user){
+    // who all can apply
+    apply_route.first.find({ 'id': req.params.id }).then(response => {
+        if (response[0].roles == enums1.roles.user) { // checking if role is user
             fields_apply.save((err, respo) => {
                 if (err) {
                     console.log(err)
@@ -28,66 +29,56 @@ exports.create = (req, res) => {
             })
 
         }
-        else{
-            res.send({message:'Only user can apply'})
+        else {
+            res.send({ message: 'Only user can apply' })
         }
-    })
-}
-
-
-//WHO ALL CAN CHANGE THE STATUS
-
-exports.update=(req,res)=>{
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Content cannot be empty"
-        });
-    }
-    apply_route.first.find({'id':req.params.id})
-    .then(response=>{
-        if(response[0].roles==enums1.roles.company){
-            let status=req.body.status;
-            let changedStatus=enums1.status[status];
-            apply_route.third.findOneAndUpdate({'userid':req.params.userid}, { $set: {status:changedStatus} },{ new: true }, (err,respo)=>{
-                if(err){
-                    console.log(err);
-                }
-                else{
-                    res.send(respo);
-                }
-            })
-        }
-        else{
-            res.send({message:'you cannot update the status'});
-        }
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
     });
 }
 
 
-// Retrieve and return all fields from database.
-exports.findAll = (_req, res) => {
-
-    apply_route.second.find({'id':req.params.company_name}).then(response=>{
-        if(response[0].roles==enums1.roles.user){
-            fields_apply.save((err, respo) => {
-                if (err) {
-                    console.log(err)
-                }
-                else {
-                    res.send(respo)
-                }
-            })
-
-        }
-    // apply_route.third.find()
-    //     .then(test2 => {
-    //         res.send(test2);
-    //     }).catch(err => {
-    //         res.status(500).send({
-    //             message: err.message || "error occurred"
-    //         });
-    //     });
-})
+//WHO ALL CAN CHANGE THE STATUS
+exports.update = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Content cannot be empty"
+        });
+    }
+    apply_route.first.find({ 'id': req.params.id })
+        .then(response => {
+            if (response[0].roles == enums1.roles.company) {
+                let status = req.body.status;
+                let changedStatus = enums1.status[status];
+                apply_route.third.findOneAndUpdate({ 'userid': req.params.userid }, { $set: { status: changedStatus } }, { new: true }, (err, respo) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        res.send(respo);
+                    }
+                })
+            }
+            else {
+                res.send({ message: 'you cannot update the status' });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
 }
+
+
+// Retrieve and return all fields from database.
+exports.findAll = (req, res) => {
+    apply_route.third.findOne({ 'company_id': req.params.company_id }).then((response) => {
+        return apply_route.first.findOne({ 'user_id': response.user_id }).then((response2) => {
+            res.json(response2)
+        })
+
+    }).catch((err) => {
+        console.log(err)
+
+    })
+
+}
+

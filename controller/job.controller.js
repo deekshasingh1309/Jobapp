@@ -1,8 +1,10 @@
 const job_route = require('../model/app.model.js');
+
 const enums = require('../enum');
-// Create and Save a new field
+
+// Create and Save a new field in job collection
 exports.create = (req, res) => {
-    // Validate request
+
     if (!!req.body.content) {
         return res.status(400).send({
             message: "Content cannot be empty"
@@ -13,11 +15,15 @@ exports.create = (req, res) => {
         job_profile: req.body.job_profile,
         company_id: req.body.company_id,
         company_name: req.body.company_name,
+        company_location: req.body.company_location,
         job_description: req.body.job_description,
-        job_expire_on: req.body.job_expire_on
+        job_expire_on: req.body.job_expire_on,
+        salary:req.body.salary
     });
-    job_route.first.find({'id':req.params.id}).then(response=>{
-        if(response[0].roles==enums.roles.admin){
+
+    // Only admin and company can add a job 
+    job_route.first.find({ 'id': req.params.id }).then(response => {   //finding details by user id 
+        if (response[0].roles == enums.roles.admin) {                 // comparing if role is admin 
             fields_job.save((err, response) => {
                 if (err) {
                     console.log(err)
@@ -28,7 +34,7 @@ exports.create = (req, res) => {
             })
 
         }
-        else if(response[0].roles==enums.roles.company){
+        else if (response[0].roles == enums.roles.company) { // checking if role is company
             fields_job.save((err, response) => {
                 if (err) {
                     console.log(err)
@@ -39,52 +45,11 @@ exports.create = (req, res) => {
             })
 
         }
-        else{
-            res.send({message:'user cannot add job'})
+        else {
+            res.send({ message: 'user cannot add a job' })
         }
     })
-    // Create a Job fields object
-
-
-    // Save fields of job in database
-    // if(res.roles==enums.roles.admin){ //perform check for admin can add a job
-    // fields_job.save((err, response) => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    //     else {
-    //         res.send(response)
-    //     }
-    // })
-    // }
-    
-    //condition for company can add a job
-    // else if(res.roles==enums.roles.company){
-    //     fields_job.save((err, response) => {
-    //         if (err) {
-    //             console.log(err)
-    //         }
-    //         else {
-    //             res.send(response)
-    //         }
-    //     })
-    // }
-    // else
-    // {
-    //    res.send({message:"user cannot add a job"}) ;
-    // }
-
-    }
-
-
-
-
-
-
-
-
-
-
+}
 
 
 // Retrieve and return all fields from database.
@@ -99,9 +64,7 @@ exports.findAll = (_req, res) => {
         });
 };
 
-
-
-//update
+//update jobs
 exports.update = (req, res) => {
     // Validate Request
     if (!req.body) {
@@ -110,7 +73,7 @@ exports.update = (req, res) => {
         });
     }
 
-    // Find id and update it 
+    // Find id and update it if there is any change in the status
     job_route.second.findOneAndUpdate({ 'job_id': req.params.id }, { $set: req.body }, { new: true })
         .then(fields_job => {
             if (!fields_job) {
@@ -131,7 +94,7 @@ exports.update = (req, res) => {
         });
 };
 
-// Delete user
+// Delete user details
 exports.delete = (req, res) => {
     job_route.second.findByIdAndRemove(req.params.id)
         .then(fields_job => {

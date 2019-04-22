@@ -45,7 +45,6 @@ exports.findAll = (_req, res) => {
 };
 
 
-
 //update
 exports.update = (req, res) => {
     // Validate Request
@@ -75,6 +74,7 @@ exports.update = (req, res) => {
             });
         });
 };
+
 
 // Delete user
 exports.delete = (req, res) => {

@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express(); //init Express
 var bodyParser = require('body-parser');
-
 var mongoose = require('mongoose');
 var url = 'mongodb://localhost:27017/naukriapp';
 //init bodyParser to extract properties from POST data
