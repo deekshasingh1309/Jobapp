@@ -2,6 +2,7 @@ module.exports = (app) => {
     const test = require('../controller/app.controller.js');
     const test1 = require('../controller/job.controller.js');
     const test2 = require('../controller/apply.controller.js');
+   // const test4 = require('../controller/login.controller');
 
     // For user collection
     app.post('/naukriapp', test.create); // Create user and post the details of users
@@ -16,9 +17,11 @@ module.exports = (app) => {
     //For job collection
     app.get('/jobs', test1.findAll);  // Retrieve job collection
 
-    app.post('/createjobs/:id', test1.create); // Create jobs
+    //app.post('/createjobs/:id', test1.create); // Create jobs
 
-    app.put('/jobs/:id', test1.update);  // Update jobs
+    app.post('/createjobs', test1.create); // Create jobs
+
+    app.put('/updatejobs', test1.update);  // Update jobs
 
     app.delete('/jobs/:id', test1.delete);   // Delete jobs
 
@@ -30,4 +33,9 @@ module.exports = (app) => {
 
     app.put('/applyn/:id/:userid', test2.update);  // Update jobs
 
+
+     //for login collection
+    // app.post('/login', test4.create); // Create login and post login details
+
+     app.post('/sign', test.findOne);
 }

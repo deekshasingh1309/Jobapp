@@ -11,12 +11,13 @@ exports.create = (req, res) => {
     }
     // Create a fields object
     const fields = new App.first({
-        id: req.body.id,
+       
         name: req.body.name,
         email: req.body.email,
+        password:req.body.password,
         phone: req.body.phone,
-        location: req.body.location,
-        roles: enums.roles[req.body.roles]
+        skills:req.body.skills,
+        roles: enums.roles['user']
     });
 
     // Save fields in database
@@ -30,7 +31,22 @@ exports.create = (req, res) => {
     })
 
 };
-
+//
+exports.findOne = async (req, res) => {
+    const data = App.first.findOne({ 'email': req.body.email,'password':req.body.password }, (err, response) => {
+    if (err) {
+    console.log(data)
+    res.status(404).send({
+    message: err.message || "Some error occured while Fetching Data From database"
+    });
+    }
+    else {
+    res.send(response)
+    
+    }
+    })
+    
+    };
 
 // Retrieve and return all fields from database.
 exports.findAll = (_req, res) => {

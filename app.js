@@ -1,12 +1,13 @@
 var express = require('express');
 var app = express(); //init Express
 var bodyParser = require('body-parser');
+const cors = require('cors') 
 var mongoose = require('mongoose');
 var url = 'mongodb://localhost:27017/naukriapp';
 //init bodyParser to extract properties from POST data
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
-
+app.use(cors())
 
 // Connecting to the database
 mongoose.connect(url, {
