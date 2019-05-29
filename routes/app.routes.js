@@ -17,7 +17,7 @@ module.exports = (app) => {
     //For job collection
     app.get('/jobs', test1.findAll);  // Retrieve job collection
 
-    //app.post('/createjobs/:id', test1.create); // Create jobs
+    app.get('/jobs2', test1.findAll2);  // Retrieve job collection
 
     app.post('/createjobs', test1.create); // Create jobs
 
@@ -27,15 +27,11 @@ module.exports = (app) => {
 
 
     //For apply collection
-    app.get('/apply/:company_id', test2.findAll);  // Company can retrieve all the users who have applied in their company
+    app.get('/apply/findapply/:user_id', test2.find_applies);  // Company can retrieve all the users who have applied in their company
 
-    app.post('/apply/:id', test2.create); // Create apply only for users
+    app.post('/apply', test2.create); // Create apply only for users
 
-    app.put('/applyn/:id/:userid', test2.update);  // Update jobs
-
-
-     //for login collection
-    // app.post('/login', test4.create); // Create login and post login details
+    app.get('/applyn/:companyname', test2.findAll);  
 
      app.post('/sign', test.findOne);
 }

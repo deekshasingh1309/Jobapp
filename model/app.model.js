@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-//enums = require('../enum');
+enums = require('../enum');
 
 //user collection schema
 const userSchema = mongoose.Schema({
@@ -19,7 +19,6 @@ const userSchema = mongoose.Schema({
 //     password:{type:String, required:true}
 // });
 
-
 //Job collection schema
 const jobSchema = mongoose.Schema({
     job_profile: { type: String, required: true },
@@ -28,18 +27,18 @@ const jobSchema = mongoose.Schema({
     job_expire_on: { type: String, required: true },
     city:{type:String, required: true},
     salary: { type: Number, required: true },
-     time : { type: Number, default: (new Date()).getTime() } 
+    time : { type : Date, default: Date.now } 
 });
-//jobSchema.index({ company_location: "2dsphere" });
-
 
 //apply collection schema
 const applySchema = mongoose.Schema({
-    company_id: { type: Number, required: true },
-    userid: { type: Number, required: true },
-    status: { type: String, required: true },
+        user_id: { type: String, required: true},
+        job_id: { type: String, required: true, max: 100 },
+        company_name: { type: String, required: true },
+        job_profile: { type: String, required: true },
+        city:{ type: String, required: true },
+        status: {type: Number, default:10}
 });
-
 
 //export all schemas
 module.exports = {

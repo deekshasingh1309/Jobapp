@@ -63,28 +63,31 @@ exports.create = (req, res, next) => {
                     })
                     if(count>0)
                     {
-                        newdata.push({ count: count, job:jobdata})
+                        newdata.push({ count: count, job:jobdata,time:jobdata.time})
                     }
                     console.log('count',count)
+                    // console.log('srr',newdata)
                    
                 })
                 var sortedarray=newdata.sort(function (a1, a2) {
                     if(a1.count!==a2.count)
                     {
-                    return a2.count - a1.count
+                    return a1.count - a2.count
                     }
                     else
                     {
-                        return a2.time-a1.time
+                        return new Date(a1.time) - new Date(a2.time);
+                        // return a1.time-a2.time
                     }
                 })
+                
                 sortedarray.map((data)=>
                 {
                     recentdata.push(data.job)
                 })
                 total=recentdata.length
 
-              //  console.log('new array', sortedarray)
+                console.log('new array', sortedarray)
                 res.send(recentdata)
             }
         })
@@ -168,16 +171,16 @@ exports.create = (req, res, next) => {
 //     res.send(arr)
 // }
 // // Retrieve and return all fields from database.
-// exports.findAll = (_req, res) => {
-//     job_route.second.find()
-//         .then(test1 => {
-//             res.send(test1);
-//         }).catch(err => {
-//             res.status(500).send({
-//                 message: err.message || "error occurred"
-//             });
-//         });
-// };
+exports.findAll2 = (_req, res) => {
+    job_route.second.find()
+        .then(test1 => {
+            res.send(test1);
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "error occurred"
+            });
+        });
+};
 
 
 //skill based sorting for display most matched on top
